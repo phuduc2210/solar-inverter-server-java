@@ -88,29 +88,29 @@
 
         <!-- JavaPNS (Push Notifications) -->
         <dependency>
-            <groupId>com.github.fernandezpablo85</groupId>
-            <artifactId>javapns</artifactId>
-            <version>2.2.1</version>
+            <groupId>com.notnoop.apns</groupId>
+            <artifactId>apns</artifactId>
+            <version>1.0.0.Beta6</version>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <!-- Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.1</version>
+                <version>3.8.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
             </plugin>
-
-            <!-- Shade Plugin để tạo Fat JAR -->
+            <!-- Shade Plugin - Tạo Fat JAR với main manifest -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4.3</version>
+                <version>3.2.4</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -124,6 +124,8 @@
                                 </transformer>
                             </transformers>
                             <finalName>solar-server</finalName>
+                            <shadedArtifactAttached>false</shadedArtifactAttached>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
                         </configuration>
                     </execution>
                 </executions>
