@@ -97,12 +97,12 @@
 
     <build>
         <resources>
-            <!-- include standard resources -->
+            <!-- Standard Maven resources location -->
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
             </resource>
-            <!-- if you keep properties in project root, include them too -->
+            <!-- Include properties files from project root -->
             <resource>
                 <directory>${project.basedir}</directory>
                 <includes>
@@ -114,20 +114,19 @@
         </resources>
 
         <plugins>
-            <!-- Compiler plugin -->
+            <!-- Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
-                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
 
-            <!-- build-helper: add current project folders as source directories
-                 (so you don't need to move the existing package folders) -->
+            <!-- Build Helper: Add non-standard source directories -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
@@ -136,10 +135,11 @@
                     <execution>
                         <id>add-source-dirs</id>
                         <phase>generate-sources</phase>
-                        <goals><goal>add-source</goal></goals>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
                         <configuration>
                             <sources>
-                                <!-- add top-level folders that contain Java source in your repo -->
                                 <source>${project.basedir}</source>
                                 <source>${project.basedir}/cache</source>
                                 <source>${project.basedir}/configs</source>
@@ -153,7 +153,7 @@
                 </executions>
             </plugin>
 
-            <!-- Shade plugin: create executable fat JAR with Main-Class manifest -->
+            <!-- Shade Plugin: Create executable fat JAR -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -161,13 +161,14 @@
                 <executions>
                     <execution>
                         <phase>package</phase>
-                        <goals><goal>shade</goal></goals>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
                         <configuration>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>solar.server.Main</mainClass>
                                 </transformer>
-                                <!-- preserve spring metadata if present -->
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                                     <resource>META-INF/spring.handlers</resource>
                                 </transformer>
@@ -175,8 +176,9 @@
                                     <resource>META-INF/spring.schemas</resource>
                                 </transformer>
                             </transformers>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
                             <finalName>solar-server</finalName>
+                            <shadedArtifactAttached>false</shadedArtifactAttached>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
                         </configuration>
                     </execution>
                 </executions>
