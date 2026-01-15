@@ -2,64 +2,59 @@
 
 JAVA_DIR="/home/haind400/solar-inverter/solar-inverter-server-java/src/main/java/solar/server"
 
-cd "$JAVA_DIR"
+cd "$JAVA_DIR" || exit 1
 
 echo "Fixing package declarations..."
 
-# Fix cache
+# Function to fix package in a file
+fix_package() {
+    local file="$1"
+    local package="$2"
+    
+    if [ -f "$file" ]; then
+        # Remove existing package line if present
+        sed -i '/^package /d' "$file"
+        # Add correct package at the beginning
+        sed -i "1i package $package;" "$file"
+    fi
+}
+
+echo "Fixing cache/"
 for file in cache/*.java; do
-    if [ -f "$file" ]; then
-        sed -i '1s/^/package solar.server.cache;\n/' "$file"
-        sed -i '2s/^package.*//' "$file"
-    fi
+    [ -f "$file" ] && fix_package "$file" "solar.server.cache"
 done
 
-# Fix configs
+echo "Fixing configs/"
 for file in configs/*.java; do
-    if [ -f "$file" ]; then
-        sed -i '1s/^/package solar.server.configs;\n/' "$file"
-        sed -i '2s/^package.*//' "$file"
-    fi
+    [ -f "$file" ] && fix_package "$file" "solar.server.configs"
 done
 
-# Fix dao
+echo "Fixing dao/"
 for file in dao/*.java; do
-    if [ -f "$file" ]; then
-        sed -i '1s/^/package solar.server.dao;\n/' "$file"
-        sed -i '2s/^package.*//' "$file"
-    fi
+    [ -f "$file" ] && fix_package "$file" "solar.server.dao"
 done
 
-# Fix models
+echo "Fixing models/"
 for file in models/*.java; do
-    if [ -f "$file" ]; then
-        sed -i '1s/^/package solar.server.models;\n/' "$file"
-        sed -i '2s/^package.*//' "$file"
-    fi
+    [ -f "$file" ] && fix_package "$file" "solar.server.models"
 done
 
-# Fix socket handlers
+echo "Fixing socket/handlers/"
 for file in socket/handlers/*.java; do
-    if [ -f "$file" ]; then
-        sed -i '1s/^/package solar.server.socket.handlers;\n/' "$file"
-        sed -i '2s/^package.*//' "$file"
-    fi
+    [ -f "$file" ] && fix_package "$file" "solar.server.socket.handlers"
 done
 
-# Fix socket tcp
+echo "Fixing socket/tcp/"
 for file in socket/tcp/*.java; do
-    if [ -f "$file" ]; then
-        sed -i '1s/^/package solar.server.socket.tcp;\n/' "$file"
-        sed -i '2s/^package.*//' "$file"
-    fi
+    [ -f "$file" ] && fix_package "$file" "solar.server.socket.tcp"
 done
 
-# Fix util
+echo "Fixing util/"
 for file in util/*.java; do
-    if [ -f "$file" ]; then
-        sed -i '1s/^/package solar.server.util;\n/' "$file"
-        sed -i '2s/^package.*//' "$file"
-    fi
+    [ -f "$file" ] && fix_package "$file" "solar.server.util"
 done
 
-echo "Done!"
+echo "Fixing Main.java"
+fix_package "Main.java" "solar.server"
+
+echo "Done! Package declarations fixed."
